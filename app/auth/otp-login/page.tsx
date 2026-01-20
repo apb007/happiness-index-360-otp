@@ -2,9 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function OTPLoginPage() {
   const router = useRouter()
@@ -62,11 +59,9 @@ export default function OTPLoginPage() {
         return
       }
 
-      // Save token to localStorage
       localStorage.setItem('authToken', data.token)
       localStorage.setItem('userEmail', email)
 
-      // Redirect to assessment
       router.push('/dashboard/student')
     } catch (err) {
       setError('Error verifying OTP. Please try again.')
@@ -76,77 +71,124 @@ export default function OTPLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Happiness Index 360</CardTitle>
-          <CardDescription>Student Login with OTP</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {step === 'email' ? (
-            <form onSubmit={handleSendOTP} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Email Address</label>
-                <Input
-                  type="email"
-                  placeholder="your@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  disabled={loading}
-                />
-              </div>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(to right, #f0f9ff, #e0e7ff)', padding: '1rem' }}>
+      <div style={{ background: 'white', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', width: '100%', maxWidth: '400px', padding: '2rem' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>Happiness Index 360</h1>
+        <p style={{ color: '#666', marginBottom: '2rem' }}>Student Login with OTP</p>
 
-              {error && <p className="text-red-500 text-sm">{error}</p>}
-              {message && <p className="text-green-500 text-sm">{message}</p>}
+        {step === 'email' ? (
+          <form onSubmit={handleSendOTP} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>
+                Email Address
+              </label>
+              <input
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={loading}
+                style={{ width: '100%', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '4px', fontSize: '1rem' }}
+              />
+            </div>
 
-              <Button type="submit" disabled={loading} className="w-full">
-                {loading ? 'Sending OTP...' : 'Send OTP to Email'}
-              </Button>
-            </form>
-          ) : (
-            <form onSubmit={handleVerifyOTP} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Enter 6-Digit OTP
-                </label>
-                <Input
-                  type="text"
-                  placeholder="000000"
-                  maxLength={6}
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                  required
-                  disabled={loading}
-                  className="text-center text-2xl tracking-widest"
-                />
-                <p className="text-sm text-gray-500 mt-2">
-                  OTP sent to: <strong>{email}</strong>
-                </p>
-              </div>
+            {error && <p style={{ color: '#ef4444', fontSize: '0.875rem' }}>{error}</p>}
+            {message && <p style={{ color: '#22c55e', fontSize: '0.875rem' }}>{message}</p>}
 
-              {error && <p className="text-red-500 text-sm">{error}</p>}
-
-              <Button type="submit" disabled={loading} className="w-full">
-                {loading ? 'Verifying...' : 'Verify OTP'}
-              </Button>
-
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full"
-                onClick={() => {
-                  setStep('email')
-                  setError('')
-                  setOtp('')
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: '100%',
+                padding: '0.5rem',
+                background: '#0284c7',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                fontSize: '1rem',
+                fontWeight: '500',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.5 : 1
+              }}
+            >
+              {loading ? 'Sending OTP...' : 'Send OTP to Email'}
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleVerifyOTP} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>
+                Enter 6-Digit OTP
+              </label>
+              <input
+                type="text"
+                placeholder="000000"
+                maxLength={6}
+                value={otp}
+                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                required
+                disabled={loading}
+                style={{
+                  width: '100%',
+                  padding: '0.5rem',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  fontSize: '2rem',
+                  textAlign: 'center',
+                  letterSpacing: '8px'
                 }}
-              >
-                Change Email
-              </Button>
-            </form>
-          )}
-        </CardContent>
-      </Card>
+              />
+              <p style={{ fontSize: '0.875rem', color: '#666', marginTop: '0.5rem' }}>
+                OTP sent to: <strong>{email}</strong>
+              </p>
+            </div>
+
+            {error && <p style={{ color: '#ef4444', fontSize: '0.875rem' }}>{error}</p>}
+
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: '100%',
+                padding: '0.5rem',
+                background: '#0284c7',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                fontSize: '1rem',
+                fontWeight: '500',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.5 : 1
+              }}
+            >
+              {loading ? 'Verifying...' : 'Verify OTP'}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setStep('email')
+                setError('')
+                setOtp('')
+              }}
+              style={{
+                width: '100%',
+                padding: '0.5rem',
+                background: 'white',
+                color: '#0284c7',
+                border: '1px solid #0284c7',
+                borderRadius: '4px',
+                fontSize: '1rem',
+                fontWeight: '500',
+                cursor: 'pointer'
+              }}
+            >
+              Change Email
+            </button>
+          </form>
+        )}
+      </div>
     </div>
   )
 }
